@@ -63,7 +63,7 @@ public class TMainFrame extends TFrame{
 	}
 	
 	@Override
-	public void RenderMenu(){
+	public void RenderFrame(){
 	    SpriteBatch FSpriteBatch = new SpriteBatch();
 	    BitmapFont FFont = new BitmapFont();
 		FloatBuffer FVertexBuffer = BufferUtils.newFloatBuffer(8);

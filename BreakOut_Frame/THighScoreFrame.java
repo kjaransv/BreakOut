@@ -15,7 +15,7 @@ public class THighScoreFrame extends TFrame{
 	}
 
 	@Override
-	public void RenderMenu() {
+	public void RenderFrame() {
 		// TODO Auto-generated method stub
 		
 	}

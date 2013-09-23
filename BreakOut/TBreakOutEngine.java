@@ -11,7 +11,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 
 public class TBreakOutEngine implements ApplicationListener{
-	private TFrame FActiveMenu;
+	private TFrame FActiveFrame;
 	
 	private TMainFrame FMain;
 	private TGameFrame FGame;
@@ -28,24 +28,24 @@ public class TBreakOutEngine implements ApplicationListener{
 	}
 	
 	public void Main(){
-		FActiveMenu = FMain;
-		FActiveMenu.Activate();
+		FActiveFrame = FMain;
+		FActiveFrame.Activate();
 	}
 	
 	public void NewGame(){
-		FActiveMenu = FGame;
+		FActiveFrame = FGame;
 		FGame.Reset();
-		FActiveMenu.Activate();
+		FActiveFrame.Activate();
 	}
 	
 	public void Continue(){
-		FActiveMenu = FGame;
-		FActiveMenu.Activate();
+		FActiveFrame = FGame;
+		FActiveFrame.Activate();
 	}
 	
 	public void HighScore(){
-		FActiveMenu = FScore;
-		FActiveMenu.Activate();
+		FActiveFrame = FScore;
+		FActiveFrame.Activate();
 	}
 	
 	public boolean GameInProgress(){
@@ -62,7 +62,7 @@ public class TBreakOutEngine implements ApplicationListener{
 
 	@Override
 	public void render() {
-		FActiveMenu.UpdateState();
+		FActiveFrame.UpdateState();
 		
 	//create
         // Enable vertex array.
@@ -76,7 +76,7 @@ public class TBreakOutEngine implements ApplicationListener{
 		Gdx.gl11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         Gdx.gl11.glMatrixMode(GL11.GL_MODELVIEW); //GL_PROJECTION
         Gdx.gl11.glLoadIdentity();
-		FActiveMenu.RenderMenu();
+        FActiveFrame.RenderFrame();
 	}
 
 	@Override

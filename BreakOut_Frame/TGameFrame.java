@@ -102,7 +102,7 @@ public class TGameFrame extends TFrame{
 	}
 
 	@Override
-	public void RenderMenu() {
+	public void RenderFrame() {
 		Gdx.gl11.glPushMatrix();
 		
 		FEdgeLeft.Render();
