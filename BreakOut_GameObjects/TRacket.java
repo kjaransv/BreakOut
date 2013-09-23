@@ -12,7 +12,7 @@ public class TRacket extends TGameObject{
 		super(AX, AY, AWidth, AHeight);
 	}
 
-	private int FSpeed = 6;
+	private int FSpeed = 12;
 
 	@Override
 	public void UpdateState() {

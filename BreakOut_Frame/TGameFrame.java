@@ -31,12 +31,18 @@ public class TGameFrame extends TFrame{
 	private TBall FBall;
 	private int FLives;
 	private boolean FGameOver;
+	private float FSpeedXOriginal = 1;
+	
+	
+	private float FWidthOfScreen = Gdx.graphics.getWidth();
+	private float FHeightOfScreen = Gdx.graphics.getHeight();
 	
 	public TGameFrame(TBreakOutEngine AEngine){
 		FEngine = AEngine;
 		
 		FRacket = new TRacket(0, 50, 60, 10);
 		FBall = new TBall(10, 50, 10);
+	
 
 		Reset();
 	}
@@ -55,6 +61,121 @@ public class TGameFrame extends TFrame{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	/**
+	 * A method that detects if the ball collides with the left,right or
+	 * top edge of the screen.
+	 */
+	public void CheckEdgeCollision()
+	{
+		if(FBall.FX < 0 + FBall.FWidth || FBall.FX > FWidthOfScreen - FBall.FWidth)
+		{
+			FBall.FSpeedX *= -1;
+		}
+		else if(FBall.FY > FHeightOfScreen - FBall.FHeight)
+		{
+			FBall.FSpeedY *= -1;
+		}
+		else return;
+	}
+	
+	/**
+	 * A method that detects where the ball collides with the racket and
+	 * updates the FSpeedX accordingly
+	 */
+	public void CheckRacketCollision()
+	{
+		if(FBall.FY < FRacket.FY + FRacket.FHeight)
+		{	
+			
+			//position of collision |x|-|-|-|-|-|-|-|-|-|-|-|
+			if(FBall.FX > FRacket.FX && FBall.FX < FRacket.FX + FRacket.FWidth - 55)
+			{
+				FBall.FSpeedY *= -1;
+				FBall.FSpeedX = FSpeedXOriginal;
+				FBall.FSpeedX *= -2.2;
+			}
+			//position of collision |-|x|-|-|-|-|-|-|-|-|-|-|
+			else if(FBall.FX > FRacket.FX + 5 && FBall.FX < FRacket.FX + FRacket.FWidth - 50)
+			{
+				FBall.FSpeedY *= -1;
+				FBall.FSpeedX = FSpeedXOriginal;
+				FBall.FSpeedX *= -1.5;
+			}
+			//position of collision |-|-|x|-|-|-|-|-|-|-|-|-|
+			else if(FBall.FX > FRacket.FX + 10 && FBall.FX < FRacket.FX + FRacket.FWidth - 45)
+			{
+				FBall.FSpeedY *= -1;
+				FBall.FSpeedX = FSpeedXOriginal;
+				FBall.FSpeedX *= -1;
+			}
+			//position of collision |-|-|-|x|-|-|-|-|-|-|-|-|
+			else if(FBall.FX > FRacket.FX + 15 && FBall.FX < FRacket.FX + FRacket.FWidth - 40)
+			{
+				FBall.FSpeedY *= -1;
+				FBall.FSpeedX = FSpeedXOriginal;
+				FBall.FSpeedX *= -0.8;
+			}
+			//position of collision |-|-|-|-|x|-|-|-|-|-|-|-|
+			else if(FBall.FX > FRacket.FX + 20 && FBall.FX < FRacket.FX + FRacket.FWidth - 35)
+			{
+				FBall.FSpeedY *= -1;
+				FBall.FSpeedX = FSpeedXOriginal;
+				FBall.FSpeedX *= -0.6;
+			}
+			//position of collision |-|-|-|-|-|x|-|-|-|-|-|-|
+			else if(FBall.FX > FRacket.FX + 25 && FBall.FX < FRacket.FX + FRacket.FWidth - 30)
+			{
+				FBall.FSpeedY *= -1;
+				FBall.FSpeedX = FSpeedXOriginal;
+				FBall.FSpeedX *= -0.2;
+			}
+			//position of collision |-|-|-|-|-|-|x|-|-|-|-|-|
+			else if(FBall.FX > FRacket.FX + 30 && FBall.FX < FRacket.FX + FRacket.FWidth - 25)
+			{
+				FBall.FSpeedY *= -1;
+				FBall.FSpeedX = FSpeedXOriginal;
+				FBall.FSpeedX *= 0.2;
+			}
+			//position of collision |-|-|-|-|-|-|-|x|-|-|-|-|
+			else if(FBall.FX > FRacket.FX + 35 && FBall.FX < FRacket.FX + FRacket.FWidth - 20)
+			{
+				FBall.FSpeedY *= -1;
+				FBall.FSpeedX = FSpeedXOriginal;
+				FBall.FSpeedX *= 0.6;
+			}
+			//position of collision |-|-|-|-|-|-|-|-|x|-|-|-|
+			else if(FBall.FX > FRacket.FX + 40 && FBall.FX < FRacket.FX + FRacket.FWidth - 15)
+			{
+				FBall.FSpeedY *= -1;
+				FBall.FSpeedX = FSpeedXOriginal;
+				FBall.FSpeedX *= 0.8;
+			}
+			//position of collision |-|-|-|-|-|-|-|-|-|x|-|-|
+			else if(FBall.FX > FRacket.FX + 45 && FBall.FX < FRacket.FX + FRacket.FWidth - 10)
+			{
+				FBall.FSpeedY *= -1;
+				FBall.FSpeedX = FSpeedXOriginal;
+				FBall.FSpeedX *= 1;
+			}
+			//position of collision |-|-|-|-|-|-|-|-|-|-|x|-|
+			else if(FBall.FX > FRacket.FX + 50 && FBall.FX < FRacket.FX + FRacket.FWidth - 5)
+			{
+				FBall.FSpeedY *= -1;
+				FBall.FSpeedX = FSpeedXOriginal;
+				FBall.FSpeedX *= 1.5;
+			}
+			//position of collision |-|-|-|-|-|-|-|-|-|-|-|x|
+			else if(FBall.FX > FRacket.FX + 55 && FBall.FX < FRacket.FX + FRacket.FWidth)
+			{
+				FBall.FSpeedY *= -1;
+				FBall.FSpeedX = FSpeedXOriginal;
+				FBall.FSpeedX *= 2.2;
+			}
+		
+		
+		}
+	}
 
 	@Override
 	public void UpdateState() {
@@ -64,6 +185,12 @@ public class TGameFrame extends TFrame{
 		}
 		
 		FRacket.UpdateState();
+		
+		//Check for wall or ceiling collision
+		CheckEdgeCollision();
+		
+		//Check for Racket collision
+		CheckRacketCollision();
 		
 		/*for (int i=0; i<FGameObjects.size(); i++){
 			FGameObjects.get(i).UpdateState();
