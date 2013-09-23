@@ -1,36 +1,17 @@
 package BreakOut_GameObjects;
 
-import java.nio.FloatBuffer;
-
 import org.lwjgl.opengl.GL11;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.BufferUtils;
 
 public class TBall extends TGameObject{
-	private FloatBuffer FVertexBuffer = BufferUtils.newFloatBuffer(8);
-
-	public TBall(float AX, float AY, float ASize, float ASpeedX, float ASpeedY){
+	public TBall(float AX, float AY, float ASize){
 		super(AX, AY, ASize, ASize);
-		FSpeedX = ASpeedX;
-		FSpeedY = ASpeedY;
-
-	    FVertexBuffer.put(new float[] {0, 0, 0, FHeight, FWidth, 0, FWidth, FHeight});
-	    FVertexBuffer.rewind();
 	}
 	
 	public void IncreaseSpeed(){
-		if (FSpeedX<0){
-			FSpeedX-= 0.1;
-		} else {
-			FSpeedX+= 0.1;
-		}
-		
-		if (FSpeedY<0){
-			FSpeedY-= 0.1;
-		} else {
-			FSpeedY+= 0.1;
-		}
+		FSpeedX*= 1.01;
+		FSpeedY*= 1.01;
 	}
 	
 	private float GetSlope(TGameObject AObject){
@@ -77,18 +58,29 @@ public class TBall extends TGameObject{
 		} else if (FX<0){
 			FX = -FX;
 			FSpeedX = -FSpeedX;
-		}
+		}*/
 		
-		if (FY+FHeight>Gdx.graphics.getHeight()){
-			FY-= FY-Gdx.graphics.getHeight()+FHeight;
-			FSpeedY = -FSpeedY;
-		} else*/ if (FY<0){
+		// if ball is out of frame it dies
+		if (
+			FX<0 || FX>Gdx.graphics.getWidth() ||
+			FY<0 || FY>Gdx.graphics.getHeight()
+		){
 			KillObject();
-			//FY = -FY;
-			//FSpeedY = -FSpeedY;
 		}
 	}
 
+	public void Reset(TRacket ARacket){
+		FSpeedX = 0;
+		FSpeedY = 0;
+		
+		FX = ARacket.FX+ARacket.FWidth/2;
+		FY = ARacket.FY+ARacket.FHeight;
+		
+		FDead = false;
+		
+		ARacket.FBall = this;
+	}
+	
 	@Override
 	public void Render() {
 		Gdx.gl11.glPushMatrix();

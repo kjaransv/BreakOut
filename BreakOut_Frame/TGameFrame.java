@@ -18,6 +18,7 @@ import BreakOut_GameObjects.TEdge;
 import BreakOut_GameObjects.TGameObject;
 import BreakOut_GameObjects.TRacket;
 import BreakOut_Input.TInputUtils;
+import BreakOut_Level.TGenerator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -28,34 +29,24 @@ public class TGameFrame extends TFrame{
 	private List<TGameObject> FGameObjects;
 	private TRacket FRacket;
 	private TBall FBall;
-
-	private TEdge FEdgeLeft, FEdgeRight, FEdgeTop;
+	private int FLives;
+	private boolean FGameOver;
 	
 	public TGameFrame(TBreakOutEngine AEngine){
 		FEngine = AEngine;
 		
-		FRacket = new TRacket();
-		FBall = new TBall(10, 50, 10, 1f, 1f);
-		
-		FGameObjects = new ArrayList<TGameObject>();
-		FGameObjects.add(FRacket);
-		FGameObjects.add(FBall);
-		
-		float EdgeWidth = 10;
-		FEdgeLeft = new TEdge(0, 0, EdgeWidth, Gdx.graphics.getHeight());
-		FEdgeRight = new TEdge(Gdx.graphics.getWidth()-EdgeWidth, 0, EdgeWidth, Gdx.graphics.getHeight());
-		FEdgeTop = new TEdge(0, Gdx.graphics.getHeight()-EdgeWidth, Gdx.graphics.getWidth(), EdgeWidth);
-		
-		float w = 39;
-		float h = 39;
-		for (int i=0; i<20; i++){
-			for (int j=1; j<6; j++){
-				FGameObjects.add(new TBrick(EdgeWidth+i*w, Gdx.graphics.getHeight()-EdgeWidth-j*h, w, h));
-			}
-		}
+		FRacket = new TRacket(0, 50, 60, 10);
+		FBall = new TBall(10, 50, 10);
+
+		Reset();
 	}
 	
 	public void Reset(){
+		FGameObjects = TGenerator.Level1();
+		FGameOver = false;
+		FLives = 2;
+		
+		FBall.Reset(FRacket);
 		// TODO set level 1 reset racket and ball
 	}
 	
@@ -69,6 +60,7 @@ public class TGameFrame extends TFrame{
 	public void UpdateState() {
 		if (TInputUtils.WasKeyJustPressed(Keys.ESCAPE)){
 			FEngine.Main();
+			return;
 		}
 		
 		FRacket.UpdateState();
@@ -85,7 +77,7 @@ public class TGameFrame extends TFrame{
 		}*/
 
 		// Ball		
-		for (int i=2; i<FGameObjects.size(); i++){ // TODO check loop if multiple balls
+		for (int i=0; i<FGameObjects.size(); i++){
 			TGameObject obj = FGameObjects.get(i);
 			if (FBall.Intersects(obj)){
 				obj.KillObject();
@@ -99,15 +91,23 @@ public class TGameFrame extends TFrame{
 				FGameObjects.remove(i);
 			}
 		}
+		
+		if (FBall.IsDead()){
+			FLives--;
+			if (FLives<0){
+				FGameOver = true;
+			} else {
+				FBall.Reset(FRacket);
+			}
+		}
 	}
 
 	@Override
 	public void RenderFrame() {
 		Gdx.gl11.glPushMatrix();
 		
-		FEdgeLeft.Render();
-		FEdgeRight.Render();
-		FEdgeTop.Render();
+		FBall.Render();
+		FRacket.Render();
 		
 		for (int i=0; i<FGameObjects.size(); i++){
 			FGameObjects.get(i).Render();

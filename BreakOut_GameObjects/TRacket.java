@@ -1,32 +1,40 @@
 package BreakOut_GameObjects;
 
-import java.nio.FloatBuffer;
-
 import org.lwjgl.opengl.GL11;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.utils.BufferUtils;
 
 public class TRacket extends TGameObject{
-	private FloatBuffer FVertexBuffer = BufferUtils.newFloatBuffer(8);
-	private int FSpeed = 6;
+	public TBall FBall;
 	
-	public TRacket(){
-		super(0, 50, 60, 10);
-		
-	    FVertexBuffer.put(new float[] {0, 0, 0, FHeight, FWidth, 0, FWidth, FHeight});
-	    FVertexBuffer.rewind();
+	public TRacket(float AX, float AY, float AWidth, float AHeight) {
+		super(AX, AY, AWidth, AHeight);
 	}
+
+	private int FSpeed = 6;
 
 	@Override
 	public void UpdateState() {
+		FSpeedX = 0;
 		if (Gdx.input.isKeyPressed(Keys.A) | Gdx.input.isKeyPressed(Keys.LEFT)){
-			FX-= FSpeed;
+			FSpeedX-= FSpeed;
 		}
 		if (Gdx.input.isKeyPressed(Keys.D) | Gdx.input.isKeyPressed(Keys.RIGHT)){
-			FX+= FSpeed;
+			FSpeedX+= FSpeed;
 		}
+		if (FBall != null){
+			if (Gdx.input.isKeyPressed(Keys.SPACE)){
+				FBall.FSpeedX = 1.5f;
+				FBall.FSpeedY = 1.5f;
+				
+				FBall = null;
+			} else {
+				FBall.FX+= FSpeedX;
+			}
+		}
+		
+		FX+= FSpeedX;
 	}
 
 	@Override
