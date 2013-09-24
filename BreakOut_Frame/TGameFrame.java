@@ -85,9 +85,8 @@ public class TGameFrame extends TFrame{
 	 */
 	public void CheckRacketCollision()
 	{
-		if(FBall.FY < FRacket.FY + FRacket.FHeight)
-		{	
-			
+		if(FBall.FY < 70 && FBall.FY < FRacket.FY + FRacket.FHeight)
+		{				
 			//position of collision |x|-|-|-|-|-|-|-|-|-|-|-|
 			if(FBall.FX > FRacket.FX && FBall.FX < FRacket.FX + FRacket.FWidth - 55)
 			{
@@ -176,6 +175,48 @@ public class TGameFrame extends TFrame{
 		
 		}
 	}
+	
+	/**
+	 * Method checks if the racket collides with either the left or right edge of screen
+	 */
+	public void CheckRacketEdgeCollision()
+	{
+		if(FRacket.FX < 0)
+		{
+			FRacket.FX = 0;
+		}
+		else if(FRacket.FX > FWidthOfScreen - FRacket.FWidth)
+		{
+			FRacket.FX = FWidthOfScreen - FRacket.FWidth;
+		}
+		else return;
+	}
+	
+	/**
+	 * Method checks if the ball has hit a brick
+	 */
+	public void CheckBallBrickCollision()
+	{
+		for(int i = 0; i < FGameObjects.size(); i++)
+		{
+			
+			TGameObject brick = FGameObjects.get(i);
+			//System.out.println("Brick y: " + brick.FY);	
+			//System.out.println("Ball y: " + FBall.FY);
+			CheckBoundaries(brick);
+		}
+	}
+	
+	public boolean CheckBoundaries(TGameObject brick)
+	{
+		if(FBall.FY > brick.FY && FBall.FY < brick.FY + brick.FHeight)
+		{
+			System.out.println("TRUE");
+			return true;
+		}
+		System.out.println("******FALSE");
+		return false;
+	}
 
 	@Override
 	public void UpdateState() {
@@ -186,22 +227,23 @@ public class TGameFrame extends TFrame{
 		
 		FRacket.UpdateState();
 		
-		//Check for wall or ceiling collision
+		//Check for edge/ball or ceiling collision
 		CheckEdgeCollision();
 		
-		//Check for Racket collision
+		//Check for Racket/ball collision
 		CheckRacketCollision();
+		
+		//Check for edge/racket collision
+		CheckRacketEdgeCollision();
+		
+		//Check for ball/brick collision
+		CheckBallBrickCollision();
+		
 		
 		/*for (int i=0; i<FGameObjects.size(); i++){
 			FGameObjects.get(i).UpdateState();
 		}*/
 		
-		// Racket
-		/*if (FRacket.Intersects(FEdgeLeft)){
-			FRacket.FX = FEdgeLeft.FX+FEdgeLeft.FWidth;
-		} else if (FRacket.Intersects(FEdgeRight)){
-			FRacket.FX = FEdgeRight.FX-FRacket.FWidth;
-		}*/
 
 		// Ball		
 		for (int i=0; i<FGameObjects.size(); i++){

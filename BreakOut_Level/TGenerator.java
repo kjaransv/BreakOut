@@ -21,13 +21,11 @@ public class TGenerator {
 		float h = 39;
 		
 		//Generate Blocks for level 1
-		/*
 		for (int i=0; i<20; i++){
 			for (int j=1; j<6; j++){
 				obj.add(new TBrick(EdgeWidth+i*w, Gdx.graphics.getHeight()-EdgeWidth-j*h, w, h));
 			}
 		}
-		*/
 		return obj;
 		
 	}
