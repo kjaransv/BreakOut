@@ -13,9 +13,9 @@ public class TGenerator {
 		ArrayList<TGameObject> obj = new ArrayList<TGameObject>();
 		
 		float EdgeWidth = 10;
-		obj.add(new TEdge(0, 0, EdgeWidth, Gdx.graphics.getHeight()));
-		obj.add(new TEdge(Gdx.graphics.getWidth()-EdgeWidth, 0, EdgeWidth, Gdx.graphics.getHeight()));
-		obj.add(new TEdge(0, Gdx.graphics.getHeight()-EdgeWidth, Gdx.graphics.getWidth(), EdgeWidth));
+		//obj.add(new TEdge(0, 0, EdgeWidth, Gdx.graphics.getHeight()));
+		//obj.add(new TEdge(Gdx.graphics.getWidth()-EdgeWidth, 0, EdgeWidth, Gdx.graphics.getHeight()));
+		//obj.add(new TEdge(0, Gdx.graphics.getHeight()-EdgeWidth, Gdx.graphics.getWidth(), EdgeWidth));
 		
 		float w = 39;
 		float h = 39;

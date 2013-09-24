@@ -43,7 +43,6 @@ public class TGameFrame extends TFrame{
 		FRacket = new TRacket(0, 50, 60, 10);
 		FBall = new TBall(10, 50, 10);
 	
-
 		Reset();
 	}
 	
@@ -53,7 +52,6 @@ public class TGameFrame extends TFrame{
 		FLives = 2;
 		
 		FBall.Reset(FRacket);
-		// TODO set level 1 reset racket and ball
 	}
 	
 	@Override
@@ -203,7 +201,9 @@ public class TGameFrame extends TFrame{
 			TGameObject brick = FGameObjects.get(i);
 			//System.out.println("Brick y: " + brick.FY);	
 			//System.out.println("Ball y: " + FBall.FY);
-			CheckBoundaries(brick);
+			if (CheckBoundaries(brick)){
+				brick.KillObject();
+			}
 		}
 	}
 	
@@ -246,16 +246,16 @@ public class TGameFrame extends TFrame{
 		
 
 		// Ball		
-		for (int i=0; i<FGameObjects.size(); i++){
+		/*for (int i=0; i<FGameObjects.size(); i++){
 			TGameObject obj = FGameObjects.get(i);
 			if (FBall.Intersects(obj)){
 				obj.KillObject();
 				FBall.IncreaseSpeed();
 			}
-		}
+		}*/
 		FBall.UpdateState();
 		
-		for (int i=FGameObjects.size()-1; i>0; i--){
+		for (int i=FGameObjects.size()-1; i>=0; i--){
 			if (FGameObjects.get(i).IsDead()){
 				FGameObjects.remove(i);
 			}
