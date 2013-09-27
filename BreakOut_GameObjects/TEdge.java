@@ -15,11 +15,8 @@ public class TEdge extends TGameObject{
 		
 	    FVertexBuffer.put(new float[] {0, 0, 0, FHeight, FWidth, 0, FWidth, FHeight});
 	    FVertexBuffer.rewind();
-	}
-	
-	@Override
-	public void KillObject(){
-		
+	    
+	    FIndestructible = true;
 	}
 
 	@Override

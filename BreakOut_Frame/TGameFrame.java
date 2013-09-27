@@ -13,8 +13,6 @@ import java.util.List;
 
 import BreakOut.TBreakOutEngine;
 import BreakOut_GameObjects.TBall;
-import BreakOut_GameObjects.TBrick;
-import BreakOut_GameObjects.TEdge;
 import BreakOut_GameObjects.TGameObject;
 import BreakOut_GameObjects.TRacket;
 import BreakOut_Input.TInputUtils;
@@ -46,12 +44,38 @@ public class TGameFrame extends TFrame{
 		Reset();
 	}
 	
-	public void Reset(){
-		FGameObjects = TGenerator.Level1();
-		FGameOver = false;
-		FLives = 2;
+	private int FLevel;
+	private void CheckAndSetNextLevel(){		
+		// check if there is a destructible object in the list
+		for (int i=0; i<FGameObjects.size(); i++){
+			if (!FGameObjects.get(i).IsIndestructible()){
+				return;
+			}
+		}
 		
+		// reward player with an extra life
+		FLives++;
+		
+		// generate next level
+		switch (FLevel){
+			case 0: FGameObjects = TGenerator.Level1(); break;
+			case 1: FGameObjects = TGenerator.Level2(); break;
+			
+			default: 
+		}
+		FLevel++;
+		
+		// set ball on the racket
 		FBall.Reset(FRacket);
+	}
+	
+	public void Reset(){
+		FGameObjects = new ArrayList<TGameObject>();
+		FGameOver = false;
+		FLives = 1;
+		
+		FLevel = 0;
+		CheckAndSetNextLevel();
 	}
 	
 	@Override
@@ -83,6 +107,11 @@ public class TGameFrame extends TFrame{
 	 */
 	public void CheckRacketCollision()
 	{
+		if(FBall.FY < FRacket.FY)
+		{
+			return;
+		}
+		
 		if(FBall.FY < 70 && FBall.FY < FRacket.FY + FRacket.FHeight)
 		{				
 			//position of collision |x|-|-|-|-|-|-|-|-|-|-|-|
@@ -269,6 +298,8 @@ public class TGameFrame extends TFrame{
 				FBall.Reset(FRacket);
 			}
 		}
+		
+		CheckAndSetNextLevel();
 	}
 
 	@Override

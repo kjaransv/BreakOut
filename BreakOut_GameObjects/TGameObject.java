@@ -6,8 +6,9 @@ import com.badlogic.gdx.utils.BufferUtils;
 
 public abstract class TGameObject {
 	protected FloatBuffer FVertexBuffer = BufferUtils.newFloatBuffer(8);
+
+	protected boolean FDead, FIndestructible;
 	
-	protected boolean FDead;
 	public float FX, FY;
 	public float FWidth, FHeight;
 	public float FSpeedX, FSpeedY;
@@ -58,8 +59,14 @@ public abstract class TGameObject {
 		return intersects;
 	}
 	
+	public boolean IsIndestructible(){
+		return FIndestructible;
+	}
+	
 	public void KillObject(){
-		FDead = true;
+		if (!FIndestructible){
+			FDead = true;
+		}
 	}
 	
 	public boolean IsDead(){
