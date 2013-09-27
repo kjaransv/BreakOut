@@ -33,7 +33,7 @@ public class TMainFrame extends TFrame{
 		FMenuItems_Active = new boolean[]{
 			false,
 			true,
-			true,
+			false, // TODO highscore disabled
 			false,
 			true
 		};
@@ -54,9 +54,9 @@ public class TMainFrame extends TFrame{
 		}
 		if (TInputUtils.WasKeyJustPressed(Keys.SPACE) | TInputUtils.WasKeyJustPressed(Keys.ENTER)){
 			switch (FSelection){
-				case 0: FEngine.Continue(); break; //continue
-				case 1: FEngine.NewGame(); break; //new game
-				case 2: FEngine.HighScore(); break; //high score
+				case 0: FEngine.ActivateGameFrame(false); break; //continue
+				case 1: FEngine.ActivateGameFrame(true); break; //new game
+				case 2: FEngine.ActivateHighScoreFrame(); break; //high score
 				case 4: Gdx.app.exit(); break; //exit
 			}
 		}

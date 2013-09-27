@@ -31,7 +31,6 @@ public class TGameFrame extends TFrame{
 	private boolean FGameOver;
 	private float FSpeedXOriginal = 1;
 	
-	
 	private float FWidthOfScreen = Gdx.graphics.getWidth();
 	private float FHeightOfScreen = Gdx.graphics.getHeight();
 	
@@ -42,6 +41,8 @@ public class TGameFrame extends TFrame{
 		FBall = new TBall(10, 50, 10);
 	
 		Reset();
+		
+		FGameOver = true;
 	}
 	
 	private int FLevel;
@@ -231,7 +232,7 @@ public class TGameFrame extends TFrame{
 			//System.out.println("Brick y: " + brick.FY);	
 			//System.out.println("Ball y: " + FBall.FY);
 			if (CheckBoundaries(brick)){
-				brick.KillObject();
+				//brick.KillObject();
 			}
 		}
 	}
@@ -250,7 +251,7 @@ public class TGameFrame extends TFrame{
 	@Override
 	public void UpdateState() {
 		if (TInputUtils.WasKeyJustPressed(Keys.ESCAPE)){
-			FEngine.Main();
+			FEngine.ActivateMainFrame();
 			return;
 		}
 		
@@ -294,6 +295,7 @@ public class TGameFrame extends TFrame{
 			FLives--;
 			if (FLives<0){
 				FGameOver = true;
+				FEngine.ActivateGameOverFrame();
 			} else {
 				FBall.Reset(FRacket);
 			}
@@ -317,6 +319,6 @@ public class TGameFrame extends TFrame{
 	}
 
 	public boolean InProgress(){
-		return true; // TODO check game state
+		return !FGameOver;
 	}
 }

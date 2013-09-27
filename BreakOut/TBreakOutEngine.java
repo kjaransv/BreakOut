@@ -2,10 +2,7 @@ package BreakOut;
 
 import org.lwjgl.opengl.GL11;
 
-import BreakOut_Frame.TGameFrame;
-import BreakOut_Frame.THighScoreFrame;
-import BreakOut_Frame.TMainFrame;
-import BreakOut_Frame.TFrame;
+import BreakOut_Frame.*;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -16,36 +13,40 @@ public class TBreakOutEngine implements ApplicationListener{
 	private TMainFrame FMain;
 	private TGameFrame FGame;
 	private THighScoreFrame FScore;
+	private TGameOverFrame FGameOver;
 	
 	@Override
 	public void create() {
 		FMain = new TMainFrame(this);
 		FGame = new TGameFrame(this);
-		FScore = new THighScoreFrame();	
-		
-		//NewGame();
-		Main();
+		FScore = new THighScoreFrame(this);
+		FGameOver = new TGameOverFrame(this);
+
+		ActivateMainFrame();
 	}
 	
-	public void Main(){
-		FActiveFrame = FMain;
+	private void ActivateFrame(TFrame AFrame){
+		FActiveFrame = AFrame;
 		FActiveFrame.Activate();
 	}
 	
-	public void NewGame(){
-		FActiveFrame = FGame;
-		FGame.Reset();
-		FActiveFrame.Activate();
+	public void ActivateMainFrame(){
+		ActivateFrame(FMain);
 	}
 	
-	public void Continue(){
-		FActiveFrame = FGame;
-		FActiveFrame.Activate();
+	public void ActivateGameOverFrame(){
+		ActivateFrame(FGameOver);
 	}
 	
-	public void HighScore(){
-		FActiveFrame = FScore;
-		FActiveFrame.Activate();
+	public void ActivateGameFrame(boolean AReset){
+		ActivateFrame(FGame);
+		if (AReset){
+			FGame.Reset();
+		}
+	}
+	
+	public void ActivateHighScoreFrame(){
+		ActivateFrame(FScore);
 	}
 	
 	public boolean GameInProgress(){

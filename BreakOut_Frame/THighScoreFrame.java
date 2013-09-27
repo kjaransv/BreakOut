@@ -1,7 +1,17 @@
 package BreakOut_Frame;
 
-public class THighScoreFrame extends TFrame{
+import BreakOut.TBreakOutEngine;
+import BreakOut_Input.TInputUtils;
 
+import com.badlogic.gdx.Input.Keys;
+
+public class THighScoreFrame extends TFrame{
+	private TBreakOutEngine FEngine;
+
+	public THighScoreFrame(TBreakOutEngine AEngine){
+		FEngine = AEngine;
+	}
+	
 	@Override
 	public void Activate() {
 		// TODO Auto-generated method stub
@@ -10,8 +20,10 @@ public class THighScoreFrame extends TFrame{
 
 	@Override
 	public void UpdateState() {
-		// TODO Auto-generated method stub
-		
+		if (TInputUtils.WasKeyJustPressed(Keys.ESCAPE)){
+			FEngine.ActivateMainFrame();
+			return;
+		}
 	}
 
 	@Override
