@@ -13,14 +13,12 @@ public class TBreakOutEngine implements ApplicationListener{
 	private TMainFrame FMain;
 	private TGameFrame FGame;
 	private THighScoreFrame FScore;
-	private TGameOverFrame FGameOver;
 	
 	@Override
 	public void create() {
 		FMain = new TMainFrame(this);
 		FGame = new TGameFrame(this);
 		FScore = new THighScoreFrame(this);
-		FGameOver = new TGameOverFrame(this);
 
 		ActivateMainFrame();
 	}
@@ -32,10 +30,6 @@ public class TBreakOutEngine implements ApplicationListener{
 	
 	public void ActivateMainFrame(){
 		ActivateFrame(FMain);
-	}
-	
-	public void ActivateGameOverFrame(){
-		ActivateFrame(FGameOver);
 	}
 	
 	public void ActivateGameFrame(boolean AReset){
@@ -77,6 +71,8 @@ public class TBreakOutEngine implements ApplicationListener{
 		Gdx.gl11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         Gdx.gl11.glMatrixMode(GL11.GL_MODELVIEW); //GL_PROJECTION
         Gdx.gl11.glLoadIdentity();
+        
+        
         FActiveFrame.RenderFrame();
 	}
 

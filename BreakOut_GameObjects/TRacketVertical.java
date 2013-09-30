@@ -5,8 +5,9 @@ import org.lwjgl.opengl.GL11;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
-public class TRacket extends TGameObject{	
-	public TRacket(float AX, float AY, float AWidth, float AHeight) {
+public class TRacketVertical extends TGameObject{
+	
+	public TRacketVertical(float AX, float AY, float AWidth, float AHeight) {
 		super(AX, AY, AWidth, AHeight);
 		
 		FIndestructible = true;
@@ -16,15 +17,15 @@ public class TRacket extends TGameObject{
 
 	@Override
 	public void UpdateState() {
-		FSpeedX = 0;
-		if (Gdx.input.isKeyPressed(Keys.A) | Gdx.input.isKeyPressed(Keys.LEFT)){
-			FSpeedX-= FSpeed;
+		FSpeedY = 0;
+		if (Gdx.input.isKeyPressed(Keys.S) | Gdx.input.isKeyPressed(Keys.DOWN)){
+			FSpeedY-= FSpeed;
 		}
-		if (Gdx.input.isKeyPressed(Keys.D) | Gdx.input.isKeyPressed(Keys.RIGHT)){
-			FSpeedX+= FSpeed;
+		if (Gdx.input.isKeyPressed(Keys.W) | Gdx.input.isKeyPressed(Keys.UP)){
+			FSpeedY+= FSpeed;
 		}
-	
-		FX+= FSpeedX;
+		
+		FY+= FSpeedY;
 	}
 
 	@Override

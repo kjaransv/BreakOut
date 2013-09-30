@@ -1,7 +1,3 @@
-// Ball bounce off objects
-// multiple hits in one
-// different angle when hitting racket
-// levels
 // status bar, lives level etc
 
 // TODO TODOS
@@ -20,9 +16,17 @@ import BreakOut_Level.TGenerator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 
 public class TGameFrame extends TFrame{
 	private TBreakOutEngine FEngine;
+	
+	private boolean FPaused;
+	
+    private SpriteBatch FSpriteBatch = new SpriteBatch();
+    private BitmapFont FFont = new BitmapFont();
 	
 	private List<TGameObject> FGameObjects;
 	private TRacket FRacket;
@@ -47,27 +51,35 @@ public class TGameFrame extends TFrame{
 	
 	private int FLevel;
 	private void CheckAndSetNextLevel(){		
-		// check if there is a destructible object in the list
+		// check if there are destructible object in the list
 		for (int i=0; i<FGameObjects.size(); i++){
 			if (!FGameObjects.get(i).IsIndestructible()){
 				return;
 			}
 		}
 		
-		// reward player with an extra life
-		FLives++;
-		
 		// generate next level
 		switch (FLevel){
 			case 0: FGameObjects = TGenerator.Level1(); break;
 			case 1: FGameObjects = TGenerator.Level2(); break;
+			case 2: FGameObjects = TGenerator.Level3(); break;
 			
-			default: 
+			default: FGameOver = true; return;
 		}
 		FLevel++;
 		
-		// set ball on the racket
-		FBall.Reset(FRacket);
+		// reward player with an extra life
+		FLives++;
+		
+		// reset ball / racket
+		FRacket.FX = Gdx.graphics.getWidth()/2;
+		FRacket.FY = 10;
+		
+		FBall.Reset();
+		FBall.FX = FRacket.FX+FRacket.FWidth/2;
+		FBall.FY = FRacket.FY+FRacket.FHeight;
+		
+		FPaused = true;
 	}
 	
 	public void Reset(){
@@ -81,8 +93,7 @@ public class TGameFrame extends TFrame{
 	
 	@Override
 	public void Activate() {
-		// TODO Auto-generated method stub
-		
+		FPaused = true;
 	}
 	
 	/**
@@ -232,7 +243,8 @@ public class TGameFrame extends TFrame{
 			//System.out.println("Brick y: " + brick.FY);	
 			//System.out.println("Ball y: " + FBall.FY);
 			if (CheckBoundaries(brick)){
-				//brick.KillObject();
+				brick.KillObject();
+				FBall.IncreaseSpeed();
 			}
 		}
 	}
@@ -241,10 +253,10 @@ public class TGameFrame extends TFrame{
 	{
 		if(FBall.FY > brick.FY && FBall.FY < brick.FY + brick.FHeight)
 		{
-			System.out.println("TRUE");
+			//System.out.println("TRUE");
 			return true;
 		}
-		System.out.println("******FALSE");
+		//System.out.println("******FALSE");
 		return false;
 	}
 
@@ -255,8 +267,18 @@ public class TGameFrame extends TFrame{
 			return;
 		}
 		
-		FRacket.UpdateState();
+		if (FGameOver){
+			return;
+		}
 		
+		if (FPaused){
+			if (TInputUtils.WasKeyJustPressed(Keys.SPACE)){
+				FPaused = false;
+			} else {
+				return;
+			}
+		}
+				
 		//Check for edge/ball or ceiling collision
 		CheckEdgeCollision();
 		
@@ -269,22 +291,14 @@ public class TGameFrame extends TFrame{
 		//Check for ball/brick collision
 		CheckBallBrickCollision();
 		
-		
-		/*for (int i=0; i<FGameObjects.size(); i++){
-			FGameObjects.get(i).UpdateState();
-		}*/
-		
+		FRacket.UpdateState();
 
-		// Ball		
-		/*for (int i=0; i<FGameObjects.size(); i++){
-			TGameObject obj = FGameObjects.get(i);
-			if (FBall.Intersects(obj)){
-				obj.KillObject();
-				FBall.IncreaseSpeed();
-			}
-		}*/
+		for (int i=0; i<FGameObjects.size(); i++){
+			FGameObjects.get(i).UpdateState();
+		}
+			
 		FBall.UpdateState();
-		
+				
 		for (int i=FGameObjects.size()-1; i>=0; i--){
 			if (FGameObjects.get(i).IsDead()){
 				FGameObjects.remove(i);
@@ -295,15 +309,27 @@ public class TGameFrame extends TFrame{
 			FLives--;
 			if (FLives<0){
 				FGameOver = true;
-				FEngine.ActivateGameOverFrame();
 			} else {
-				FBall.Reset(FRacket);
+				FBall.Reset();
+				FBall.FX = FRacket.FX+FRacket.FWidth/2;
+				FBall.FY = FRacket.FY+FRacket.FHeight;
+				FPaused = true;
 			}
 		}
 		
 		CheckAndSetNextLevel();
 	}
 
+	private void RenderHUD(){
+        String t = "Level "+FLevel;
+    	TextBounds bounds = FFont.getBounds(t);
+    	FFont.draw(FSpriteBatch, t, 10, Gdx.graphics.getHeight()-bounds.height);
+    	
+        t = "Lives "+FLives;
+    	bounds = FFont.getBounds(t);
+    	FFont.draw(FSpriteBatch, t, 10, Gdx.graphics.getHeight()-bounds.height*2-4);
+	}
+	
 	@Override
 	public void RenderFrame() {
 		Gdx.gl11.glPushMatrix();
@@ -314,6 +340,31 @@ public class TGameFrame extends TFrame{
 		for (int i=0; i<FGameObjects.size(); i++){
 			FGameObjects.get(i).Render();
 		}
+		
+        FSpriteBatch.begin();
+        
+        RenderHUD();
+
+        if (FGameOver){
+	       // Gdx.gl11.glPushMatrix();
+	        
+	        Gdx.gl11.glTranslatef(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
+	    	
+	        String t = "Game Over mate!";
+	        if (FLives>=0) {
+	        	t = "Victory!";
+	        }
+	    	TextBounds bounds = FFont.getBounds(t);
+	    	FFont.draw(FSpriteBatch, t, -bounds.width/2, bounds.height);
+	    	
+	        t = "Press the ESC key";
+	    	bounds = FFont.getBounds(t);
+	    	FFont.draw(FSpriteBatch, t, -bounds.width/2, -bounds.height);
+	    	
+	    //	Gdx.gl11.glPopMatrix();
+        }
+    		
+    	FSpriteBatch.end();
 		
 		Gdx.gl11.glPopMatrix();
 	}

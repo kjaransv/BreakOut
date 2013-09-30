@@ -69,16 +69,11 @@ public class TBall extends TGameObject{
 		}
 	}
 
-	public void Reset(TRacket ARacket){
-		FSpeedX = 0;
-		FSpeedY = 0;
-		
-		FX = ARacket.FX+ARacket.FWidth/2;
-		FY = ARacket.FY+ARacket.FHeight;
-		
+	public void Reset(){
+		FSpeedX = 1.5f;
+		FSpeedY = 1.5f;
+				
 		FDead = false;
-		
-		ARacket.FBall = this;
 	}
 	
 	@Override
