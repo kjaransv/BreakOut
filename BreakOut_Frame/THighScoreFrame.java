@@ -14,8 +14,6 @@ public class THighScoreFrame extends TFrame{
 	
 	@Override
 	public void Activate() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -28,8 +26,6 @@ public class THighScoreFrame extends TFrame{
 
 	@Override
 	public void RenderFrame() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

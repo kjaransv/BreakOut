@@ -25,7 +25,11 @@ public class TGenerator {
 		//Generate Blocks for level 1
 		for (int i=0; i<20; i++){
 			for (int j=1; j<6; j++){
-				obj.add(new TBrick(EdgeWidth+i*w, Gdx.graphics.getHeight()-EdgeWidth-j*h-HUD_HEIGHT, w, h));
+				obj.add(new TBrick(
+					EdgeWidth+i*w, Gdx.graphics.getHeight()-EdgeWidth-j*h-HUD_HEIGHT,
+					w, h,
+					0, 1, 1
+				));
 			}
 		}
 		return obj;
@@ -46,9 +50,14 @@ public class TGenerator {
 		for (int i=0; i<20; i++){
 			for (int j=1; j<6; j++){
 				if (i==j || 19-i==j){
-					obj.add(new TEdge(EdgeWidth+i*w, Gdx.graphics.getHeight()-EdgeWidth-j*h-HUD_HEIGHT, w, h));
+					obj.add(new TEdge(
+						EdgeWidth+i*w, Gdx.graphics.getHeight()-EdgeWidth-j*h-HUD_HEIGHT, w, h));
 				} else {
-					obj.add(new TBrick(EdgeWidth+i*w, Gdx.graphics.getHeight()-EdgeWidth-j*h-HUD_HEIGHT, w, h));
+					obj.add(new TBrick(
+						EdgeWidth+i*w, Gdx.graphics.getHeight()-EdgeWidth-j*h-HUD_HEIGHT,
+						w, h,
+						0, 1, 1
+					));
 				}
 			}
 		}
@@ -73,12 +82,57 @@ public class TGenerator {
 				if (i==j || 19-i==j){
 					obj.add(new TEdge(EdgeWidth+i*w, Gdx.graphics.getHeight()-EdgeWidth-j*h-HUD_HEIGHT, w, h));
 				} else {
-					obj.add(new TBrick(EdgeWidth+i*w, Gdx.graphics.getHeight()-EdgeWidth-j*h-HUD_HEIGHT, w, h));
+					obj.add(new TBrick(
+						EdgeWidth+i*w, Gdx.graphics.getHeight()-EdgeWidth-j*h-HUD_HEIGHT,
+						w, h,
+						0, 1, 1
+					));
 				}
 			}
 		}
 		return obj;
 	}
 
+	public static ArrayList<TGameObject> Level4(){
+		ArrayList<TGameObject> obj = new ArrayList<TGameObject>();
+		
+		float EdgeWidth = 10;
+		
+		obj.add(new TRacket(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()-EdgeWidth-HUD_HEIGHT, 60, 10));
+		obj.add(new TRacketVertical(0, Gdx.graphics.getHeight()/2, 10, 60));
+		obj.add(new TRacketVertical(Gdx.graphics.getWidth()-EdgeWidth, Gdx.graphics.getHeight()/2, 10, 60));
+		
+		float w = 39;
+		float h = 39;
+		
+		//Generate Blocks for level 4	
+		float x;
+		float y;
+		float width;
+		float height;
+		
+		
+		
+		x = EdgeWidth+2;
+		y = Gdx.graphics.getHeight()-EdgeWidth-HUD_HEIGHT-h*5+2;
+		width = w*10-4;
+		height = h*5-4;
+		obj.add(new TEdge(x+width, y, 2, height));
+		obj.add(new TBrick(x, y, width, height, 1f, 0.75f, 0));
+		obj.add(new TBrick(x+width+2, y, width, height, 1f, 0.75f, 0));
+
+		//obj.add(new TBrick(EdgeWidth, Gdx.graphics.getHeight()-EdgeWidth-HUD_HEIGHT-h*5, w*20, h*5, 1, 1, 0));
+		
+		/*for (int i=0; i<20; i++){
+			for (int j=1; j<6; j++){
+				if (i==j || 19-i==j){
+					obj.add(new TEdge(EdgeWidth+i*w, Gdx.graphics.getHeight()-EdgeWidth-j*h-HUD_HEIGHT, w, h));
+				} else {
+					obj.add(new TBrick(EdgeWidth+i*w, Gdx.graphics.getHeight()-EdgeWidth-j*h-HUD_HEIGHT, w, h));
+				}
+			}
+		}*/
+		return obj;
+	}
 
 }

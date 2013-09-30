@@ -10,8 +10,8 @@ public class TBall extends TGameObject{
 	}
 	
 	public void IncreaseSpeed(){
-		FSpeedX*= 1.01;
-		FSpeedY*= 1.01;
+		FSpeedX*= 1.025;
+		FSpeedY*= 1.025;
 	}
 		
 	@Override

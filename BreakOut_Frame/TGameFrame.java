@@ -45,6 +45,87 @@ public class TGameFrame extends TFrame{
 		FGameOver = true;
 	}
 	
+	private void Test(){
+		// TODO see comment
+		// also determine between objects what object is hit first (or even same time)
+		// find delta time and move ball accordingly and then see if there is another
+		// collision in the remaining time frame
+		
+		// find ball constants
+		float cx = FBall.FX+FBall.FWidth;
+		float cy = FBall.FY+FBall.FHeight;
+		
+		float m = FBall.FSpeedY/FBall.FSpeedX;
+		float k = cy-m*cx;
+		
+		// for each object
+		for (int i=0; i<FGameObjects.size(); i++){
+			TGameObject obj = FGameObjects.get(i);
+			
+			// expand target object, thus shrinking the ball to 0 size
+			float b_width = FBall.FWidth+obj.FWidth;
+			float b_height = FBall.FHeight+obj.FHeight;
+			
+			// calculate when each of the object lines will intersect with the ball vector
+			float collision_left = m*obj.FX+k;
+			float collision_right = m*(obj.FX+b_width)+k;
+			float collision_bottom = (obj.FY-k)/m;
+			float collision_top = (obj.FY+b_height-k)/m;;
+			
+			// determine if there is an actual collision and then at what time
+			float[] collision_time = {1, 1, 1, 1};
+			if (obj.FY <= collision_left && collision_left <= obj.FY+b_height) {
+				collision_time[0] = (collision_left-cy)/FBall.FSpeedY;
+			}
+			if (obj.FY <= collision_right && collision_right <= obj.FY+b_height){
+				collision_time[1] = (collision_right-cy)/FBall.FSpeedY;
+			}
+			if (obj.FX <= collision_bottom && collision_bottom <= obj.FX+b_width){
+				collision_time[2] = (collision_bottom-cx)/FBall.FSpeedX;
+			}
+			if (obj.FX <= collision_top && collision_top <= obj.FX+b_width){
+				collision_time[3] = (collision_top-cx)/FBall.FSpeedX;
+			}
+			
+			// new speed, depending on collision
+			int min = 0;
+			for (int j=1; j<collision_time.length; j++){
+				if (collision_time[j]>=0 && collision_time[j]<collision_time[min]){
+					min = j;
+				}
+			}
+			if (collision_time[min]>=0 && collision_time[min]<1){
+				switch (min){
+					// side hit
+					case 0:
+					case 1: FBall.FSpeedX*= -1; break;
+					// top/bot hit
+					case 2:
+					case 3: FBall.FSpeedY*= -1; break;
+				}
+				System.out.println(collision_time[min]);
+				obj.KillObject();
+				FBall.IncreaseSpeed();
+				
+				if (obj == FRacket){
+					CheckRacketCollision();
+				}
+			}
+			
+			
+			/*
+			if (
+					(obj.FY <= collision_left && collision_left <= obj.FY+b_height && collision_left-cy<FBall.FSpeedY) ||
+					(obj.FY <= collision_right && collision_right <= obj.FY+b_height && collision_right-cy<FBall.FSpeedY) ||
+					(obj.FX <= collision_bottom && collision_bottom <= obj.FX+b_width && collision_bottom-cx<FBall.FSpeedX) ||
+					(obj.FX <= collision_top && collision_top <= obj.FX+b_width && collision_top-cx<FBall.FSpeedX)
+			){
+				obj.KillObject();
+			}
+			*/
+		}
+	}
+	
 	private int FLevel;
 	private void CheckAndSetNextLevel(){		
 		// check if there are destructible object in the list
@@ -59,6 +140,7 @@ public class TGameFrame extends TFrame{
 			case 0: FGameObjects = TGenerator.Level1(); break;
 			case 1: FGameObjects = TGenerator.Level2(); break;
 			case 2: FGameObjects = TGenerator.Level3(); break;
+			case 3: FGameObjects = TGenerator.Level4(); break;
 			
 			default: FGameOver = true; return;
 		}
@@ -68,12 +150,13 @@ public class TGameFrame extends TFrame{
 		FLives++;
 		
 		// reset ball / racket
+		FGameObjects.add(FRacket);
 		FRacket.FX = Gdx.graphics.getWidth()/2;
 		FRacket.FY = 10;
 		
 		FBall.Reset();
 		FBall.FX = FRacket.FX+FRacket.FWidth/2;
-		FBall.FY = FRacket.FY+FRacket.FHeight;
+		FBall.FY = FRacket.FY+FRacket.FHeight+1;
 		
 		FPaused = true;
 	}
@@ -238,9 +321,10 @@ public class TGameFrame extends TFrame{
 			TGameObject brick = FGameObjects.get(i);
 			//System.out.println("Brick y: " + brick.FY);	
 			//System.out.println("Ball y: " + FBall.FY);
-			if (CheckBoundaries(brick)){
+			if (FBall.FX > brick.FX && FBall.FX < brick.FX + brick.FWidth
+					&& FBall.FY + FBall.FHeight > brick.FY && FBall.FY < brick.FY + brick.FHeight){
 				brick.KillObject();
-				FBall.IncreaseSpeed();
+				FBall.FSpeedY *= -1;
 			}
 		}
 	}
@@ -274,7 +358,10 @@ public class TGameFrame extends TFrame{
 				return;
 			}
 		}
-				
+		
+		Test();
+		
+		/*
 		//Check for edge/ball or ceiling collision
 		CheckEdgeCollision();
 		
@@ -286,9 +373,10 @@ public class TGameFrame extends TFrame{
 		
 		//Check for ball/brick collision
 		CheckBallBrickCollision();
+		*/
 		
 		// update state of all objects
-		FRacket.UpdateState();
+		//FRacket.UpdateState();
 
 		for (int i=0; i<FGameObjects.size(); i++){
 			FGameObjects.get(i).UpdateState();
@@ -341,7 +429,7 @@ public class TGameFrame extends TFrame{
 		Gdx.gl11.glPushMatrix();
 		
 		FBall.Render();
-		FRacket.Render();
+		//FRacket.Render();
 		
 		for (int i=0; i<FGameObjects.size(); i++){
 			FGameObjects.get(i).Render();

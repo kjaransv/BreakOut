@@ -59,26 +59,20 @@ public class TBreakOutEngine implements ApplicationListener{
 	public void render() {
 		FActiveFrame.UpdateState();
 		
-	//create
-        // Enable vertex array.
         Gdx.gl11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-//resize
-		//Gdx.gl11.glMatrixMode(GL11.GL_PROJECTION);
-		//Gdx.gl11.glLoadIdentity();
+
         Gdx.gl11.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		Gdx.glu.gluOrtho2D(Gdx.gl11, 0, Gdx.graphics.getWidth(), 0, Gdx.graphics.getHeight());
-//render
+
 		Gdx.gl11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         Gdx.gl11.glMatrixMode(GL11.GL_MODELVIEW); //GL_PROJECTION
         Gdx.gl11.glLoadIdentity();
-        
         
         FActiveFrame.RenderFrame();
 	}
 
 	@Override
 	public void resize(int AWidth, int AHeight) {
-		
 	}
 
 	@Override
