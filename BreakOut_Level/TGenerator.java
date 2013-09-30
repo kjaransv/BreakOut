@@ -7,6 +7,8 @@ import BreakOut_GameObjects.*;
 import com.badlogic.gdx.Gdx;
 
 public class TGenerator {
+	// creates an array of TGameObject that is used to represent a level
+	
 	public static final int HUD_HEIGHT = 50;
 	
 	public static ArrayList<TGameObject> Level1(){
@@ -65,7 +67,7 @@ public class TGenerator {
 		float w = 39;
 		float h = 39;
 		
-		//Generate Blocks for level 1
+		//Generate Blocks for level 3
 		for (int i=0; i<20; i++){
 			for (int j=1; j<6; j++){
 				if (i==j || 19-i==j){

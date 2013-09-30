@@ -21,8 +21,6 @@ public class TEdge extends TGameObject{
 
 	@Override
 	public void UpdateState() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

@@ -1,7 +1,3 @@
-// status bar, lives level etc
-
-// TODO TODOS
-
 package BreakOut_Frame;
 
 import java.util.ArrayList;
@@ -291,6 +287,7 @@ public class TGameFrame extends TFrame{
 		//Check for ball/brick collision
 		CheckBallBrickCollision();
 		
+		// update state of all objects
 		FRacket.UpdateState();
 
 		for (int i=0; i<FGameObjects.size(); i++){
@@ -298,13 +295,15 @@ public class TGameFrame extends TFrame{
 		}
 			
 		FBall.UpdateState();
-				
+		
+		// remove all dead objects
 		for (int i=FGameObjects.size()-1; i>=0; i--){
 			if (FGameObjects.get(i).IsDead()){
 				FGameObjects.remove(i);
 			}
 		}
 		
+		// check end state, ball is dead
 		if (FBall.IsDead()){
 			FLives--;
 			if (FLives<0){
@@ -317,6 +316,7 @@ public class TGameFrame extends TFrame{
 			}
 		}
 		
+		// check win state, all bricks are dead
 		CheckAndSetNextLevel();
 	}
 
@@ -328,6 +328,12 @@ public class TGameFrame extends TFrame{
         t = "Lives "+FLives;
     	bounds = FFont.getBounds(t);
     	FFont.draw(FSpriteBatch, t, 10, Gdx.graphics.getHeight()-bounds.height*2-4);
+    	
+    	if (FPaused){
+            t = "[Press the spacebar to start]";
+        	bounds = FFont.getBounds(t);
+        	FFont.draw(FSpriteBatch, t, (Gdx.graphics.getWidth()-bounds.width)/2, Gdx.graphics.getHeight()-bounds.height*2);
+    	}
 	}
 	
 	@Override

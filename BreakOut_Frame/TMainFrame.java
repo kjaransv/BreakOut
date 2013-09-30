@@ -24,7 +24,7 @@ public class TMainFrame extends TFrame{
 		FEngine = AEngine;
 		FSelection = 0;
 		FMenuItems = new String[]{
-        		"Continue", // TODO: What about cases when there is no continue
+        		"Continue",
         		"New Game",
         		"High Score",
         		"",
@@ -33,7 +33,7 @@ public class TMainFrame extends TFrame{
 		FMenuItems_Active = new boolean[]{
 			false,
 			true,
-			false, // TODO highscore disabled
+			false, // TODO highscore disabled, implement score and re-enable
 			false,
 			true
 		};

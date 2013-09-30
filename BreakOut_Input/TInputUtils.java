@@ -12,6 +12,9 @@ public class TInputUtils {
 	}
 	
 	public static boolean WasKeyJustPressed(int AKey){
+		// remembers if a given key is pressed
+		// returns true if the key is pressed but was previously not
+		
 		if (Gdx.input.isKeyPressed(AKey)){
 			if (!FPressedKeys.containsKey(AKey) || !FPressedKeys.get(AKey)){
 				FPressedKeys.put(AKey, true);
